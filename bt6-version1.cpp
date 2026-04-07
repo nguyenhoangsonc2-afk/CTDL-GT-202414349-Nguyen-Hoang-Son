@@ -5,44 +5,48 @@ using namespace std;
 // 1. Cấu trúc file
 struct File {
     string name;
-    long timestamp; // thời gian
-    double size;    // GB
+    long timestamp; // thời gian(số càng lớn càng mới)
+    double size;    // Dung lượng (GB)
 };
 
 // 2. Node của danh sách liên kết
 struct Node {
-    File data;
-    Node* next;
+    File data; // dữ liêu là 1 file
+    Node* next; // con trỏ trỏ tới nốt tiếp theo
 };
 
-// Tạo node
+// 3.Tạo node mới
 Node* createNode(File f) {
-    Node* p = new Node;
+    Node* p = new Node;  
     p->data = f;
     p->next = NULL;
     return p;
 }
 
-// 3. Chèn file theo thứ tự thời gian
+// 4. Chèn file theo thứ tự thời gian
 void insertSorted(Node*& head, File f) {
-    Node* p = createNode(f);
+    Node* p = createNode(f); //tạo node mới
 
+ // nếu DS rỗng or file mới "cũ hơn" head
     if (head == NULL || f.timestamp < head->data.timestamp) {
-        p->next = head;
-        head = p;
+        p->next = head; // node mới trỏ tới head
+        head = p; // cập nhập head
         return;
     }
 
-    Node* cur = head;
+    Node* cur = head; //trỏ duyệt
+
+    // tìm vị trí để chèn
     while (cur->next != NULL && cur->next->data.timestamp < f.timestamp) {
-        cur = cur->next;
+        cur = cur->next; // tới node tiếp theo
     }
 
+    // chèn node vào giữa(cuối)
     p->next = cur->next;
     cur->next = p;
 }
 
-// 4. Tính tổng dung lượng
+// 5. Tính tổng dung lượng
 double totalSize(Node* head) {
     double sum = 0;
     while (head != NULL) {
