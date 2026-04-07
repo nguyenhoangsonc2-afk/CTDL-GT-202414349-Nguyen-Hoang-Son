@@ -48,44 +48,47 @@ void insertSorted(Node*& head, File f) {
 
 // 5. Tính tổng dung lượng
 double totalSize(Node* head) {
-    double sum = 0;
-    while (head != NULL) {
-        sum += head->data.size;
-        head = head->next;
+    double sum = 0; // tổng
+    while (head != NULL) { // duyệt dsach
+        sum += head->data.size; // cộng dung lượng
+        head = head->next; // sang node tiếp
     }
     return sum;
 }
 
-// 5. Xóa file nhỏ nhất
+// 6. Xóa file nhỏ nhất
 void removeSmallest(Node*& head) {
-    if (head == NULL) return;
+    if (head == NULL) return; //rỗng thì thôi
 
-    Node *cur = head, *prev = NULL;
+
+// duyệt dsach
+    Node *cur = head, *prev = NULL; 
     Node *minNode = head, *minPrev = NULL;
 
-    double minSize = head->data.size;
-
+    double minSize = head->data.size; // giá trị min ban đầu
+ 
+    // duyệt toạn bộ dsach -> tìm node min
     while (cur != NULL) {
         if (cur->data.size < minSize) {
-            minSize = cur->data.size;
-            minNode = cur;
+            minSize = cur->data.size; //cập nhập size min
+            minNode = cur; // cập nhập node min
             minPrev = prev;
         }
-        prev = cur;
-        cur = cur->next;
+        prev = cur; // cập nhập prev
+        cur = cur->next; //.
     }
 
-    // Xóa node
-    if (minNode == head) head = head->next;
-    else minPrev->next = minNode->next;
+    // Xóa node nhỏ nhất
+    if (minNode == head) head = head->next;// nếu là head thì update head
+    else minPrev->next = minNode->next; // bỏ qua node cần xóa
 
     cout << "Xoa file: " << minNode->data.name << endl;
-    delete minNode;
+    delete minNode; // giải phóng bộ nhớ :>
 }
 
-// 6. Tối ưu để <= 32GB
+// 7. Tối ưu để <= 32GB
 void optimize(Node*& head) {
-    double sum = totalSize(head);
+    double sum = totalSize(head); // tính tổng lúc chưa tối ưu
 
     while (sum > 32) {
         // tìm lại file nhỏ nhất để trừ size
@@ -98,22 +101,21 @@ void optimize(Node*& head) {
             cur = cur->next;
         }
 
-        removeSmallest(head);
-        sum -= minSize;
+        removeSmallest(head); // xóa file min
+        sum -= minSize; // cập nhập lại sum
     }
 }
 
-// 7. In danh sách
+// 8. In danh sách
 void printList(Node* head) {
     while (head != NULL) {
         cout << head->data.name << " | "
              << head->data.size << "GB | "
              << head->data.timestamp << endl;
-        head = head->next;
+        head = head->next; // sang node tiếp theo
     }
 }
 
-// 8. Main test
 int main() {
     Node* head = NULL;
 
